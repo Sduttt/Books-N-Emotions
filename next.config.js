@@ -25,6 +25,25 @@ const nextConfig = {
     images: {
         domains: ['res.cloudinary.com'],
     },
+    async headers() {
+  return [
+    {
+      source: '/(.*)',
+      headers: [
+        // {
+        //      key: 'Content-Security-Policy',
+        //      value: "default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com",
+        //    },
+
+        {
+             key: 'Content-Security-Policy',
+             value: "default-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; frame-src 'self' <URL>",
+           },
+      ],
+    },
+  ];
+},
+
 }
 
 module.exports = nextConfig

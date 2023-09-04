@@ -47,8 +47,11 @@ const OrderPage = () => {
 
 
 
-  if (isLoading) return 'Loading...'
-
+  if (isLoading) return(
+    <div className="flex items-center justify-center min-h-[calc(100vh-7rem)] sm:min-h-[calc(100vh-9rem)] md:min-h-[calc(100vh-11rem)]">
+      Loading...
+    </div>
+  )
   if (error) return 'An error has occurred: '
 
   return (

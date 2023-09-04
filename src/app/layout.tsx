@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Head from "next/head";
 
 // components
 import Notification from "@/components/Notification";
@@ -19,7 +20,12 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "BooksNEmotions",
   description: "Buy books online at BooksNEmotions",
+
 };
+
+{/* <meta http-equiv="Content-Security-Policy" content="default-src *;
+   img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *;
+   style-src  'self' 'unsafe-inline' *"></meta> */}
 
 export default function RootLayout({
   children,
@@ -28,6 +34,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        <meta http-equiv="Content-Security-Policy" content="default-src *; img-src * 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' *;
+   style-src  'self' 'unsafe-inline' *" />
+      </Head>
+
       <body className={inter.className}>
         <AuthProvider>
           <QueryProvider>

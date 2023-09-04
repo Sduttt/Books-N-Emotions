@@ -1,14 +1,52 @@
 'use client';
 import { useCartStore } from "@/utils/store";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
 
 const CartPage = () => {
 
   const { products, totalPrice, totalQuantity, removeFromCart } = useCartStore();
+  const { data: session } = useSession();
+  const router = useRouter();
+
+
   useEffect(() => {
     useCartStore.persist.rehydrate()
   }, [])
+
+  const handleCheckout = async () => {
+    if (!session) {
+      router.push('/login')
+      toast.error('Please login to continue')
+    }
+    else {
+      try {
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/orders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            price: totalPrice,
+            products,
+            status: 'Not Paid!',
+            userEmail: session.user.email,
+          }),
+
+        })
+
+        const data = await res.json()
+        router.push(`/pay/${data.id}`)
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
 
   return (
     <>
@@ -58,7 +96,7 @@ const CartPage = () => {
                 <span className="">Rs. {totalPrice} </span>
               </div>
               <div className=" self-end">
-                <button className="px-4 py-2 rounded bg-red-500 text-white font-semibold">
+                <button onClick={handleCheckout} className="px-4 py-2 rounded bg-red-500 text-white font-semibold">
                   Checkout
                 </button>
               </div>
